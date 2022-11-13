@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <style type="text/css">
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+
+        body {
+            background: #7066e0;
+        }
+
+        #center {
+            width: 700px;
+            margin: 0 auto;
+            border: 3px solid black;
+            border-radius: 15px;
+            padding:20px;
+        }
+
+        input {
+            width: 400px;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 5px;
+            background: white;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px;
+            min-width: 100px;
+            border: 3px solid black;
+            border-radius: 15px;
+            background: white;
+
+ 
+        }
+
+        #numbers,
+        #challenge,
+        #answer {
+            visibility: hidden;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+    <div id="center">
+
+        <form action="javascript:void(0);">
+            <input id="question" type="text" required placeholder="Enter your challenge here"
+                onkeydown="return /[a-z ]/.test(event.key)" />
+
+            <button id="go" type="submit">Go</button>
+        </form>
+
+        <br />
+
+        <div id="numbers"></div>
+
+        <br />
+
+        <input id="challenge" type="text" readonly />
+
+        <br />
+
+        <input id="answer" type="text" placeholder="Type your answer here"
+            onkeydown="return /[a-z ]/.test(event.key)" />
+
+        <br />
+
+        <button id="restart">Restart</button>
+
+    </div>
+
+    <script>
+        var question = document.querySelector("#question")
+        var go = document.querySelector("#go")
+        var numbers = document.querySelector("#numbers")
+        var challenge = document.querySelector("#challenge")
+        var answer = document.querySelector("#answer")
+        var restart = document.querySelector("#restart")
+
+        go.addEventListener("click", function () {
+            question.style.visibility = "hidden"
+            go.style.visibility = "hidden"
+            numbers.style.visibility = "visible"
+            challenge.style.visibility = "visible"
+            answer.style.visibility = "visible"
+
+            challenge.value = ""
+            var letters = question.value.split("")
+
+            letters.forEach(function (letter) {
+                if (letter != " ") {
+                    challenge.value += letter.charCodeAt(0) - 96 + " "
+                }
+            })
+
+            answer.value = ""
+            answer.select()
+        })
+
+        answer.addEventListener("keyup", function () {
+            var letters = answer.value.split("")
+            var numbers = ""
+
+            letters.forEach(function (letter) {
+                if (letter != " ") {
+                    numbers += letter.charCodeAt(0) - 96
+                }
+            })
+
+            if (numbers == challenge.value.replace(/ /g, "")) {
+
+                Swal.fire({
+                    title: 'Congrats!',
+                    text: 'You completed the challenge.',
+                    imageUrl: 'https://images.unsplash.com/photo-1596583164564-5d6e7a9e0c68?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+                    imageWidth: 400,
+                    imageHeight: 200,
+                    imageAlt: 'Custom image',
+                }).then((result) => {
+                    Swal.fire({
+                        title: 'Play again?',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, I love this game!',
+                        cancelButtonText: 'No thanks, maybe some other time'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload()
+                        }
+                    })
+                })
+
+
+            }
+        })
+
+        restart.addEventListener("click", function () {
+            location.reload()
+        })
+
+        setTimeout(function () {
+            question.select()
+        }, 500);
+    </script>
+</body>
+
+
+
+</html>
